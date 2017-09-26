@@ -78,6 +78,10 @@ describe AttemptThis do
       lambda{attempt(3.times).with_delay(0)}.should_not raise_error
     end
 
+    it 'accepts decimal delay' do
+      lambda{attempt(3.times).with_delay(0.1)}.should_not raise_error
+    end
+
     it 'should accept calls without a code block' do
       lambda{attempt(3.times).with_delay(3)}.should_not raise_error
     end

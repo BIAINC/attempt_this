@@ -1,14 +1,20 @@
 PATH
   remote: .
   specs:
-    attempt_this (1.0.1)
+    attempt_this (1.0.2)
 
 GEM
   remote: http://rubygems.org/
   specs:
+    coderay (1.1.1)
     diff-lcs (1.2.4)
     docile (1.1.2)
+    method_source (0.8.2)
     multi_json (1.8.4)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rake (10.1.1)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
@@ -23,6 +29,7 @@ GEM
       multi_json
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
+    slop (3.6.0)
 
 PLATFORMS
   java
@@ -32,6 +39,10 @@ PLATFORMS
 DEPENDENCIES
   attempt_this!
   bundler (~> 1.6)
+  pry
   rake (~> 10.1)
   rspec (~> 2.13)
   simplecov (~> 0.8)
+
+BUNDLED WITH
+   1.14.5

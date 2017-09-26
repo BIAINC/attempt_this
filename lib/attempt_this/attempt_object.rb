@@ -42,19 +42,20 @@ module AttemptThis
 
     # Specifies delay in seconds between failed attempts.
     def with_delay(delay, &block)
+      raise(ArgumentError, 'Delay policy has already been specified!') if @delay_policy
+
       # Delay should be either an integer or a range of integers.
       if (delay.is_a?(Numeric))
-        raise(ArgumentError, "Delay should be a non-negative number; got #{delay}!") unless delay >= 0
-        delay = delay..delay
+        raise(ArgumentError, "Delay should be a non-negative number; got #{delay}!") if delay < 0
+        @delay_policy = lambda{ Kernel.sleep(delay) }
       elsif delay.is_a?(Range)
         raise(ArgumentError, "Range members should be numbers; got #{delay}!") unless delay.first.is_a?(Numeric) && delay.last.is_a?(Numeric)
-        raise(ArgumentError, "Range members should be non-negative; got #{delay}!") unless delay.first >= 0 && delay.last >= 0
-        raise(ArgumentError, "Range's end should be greater than or equal to range's start; got #{delay}!") unless delay.first <= delay.last
+        raise(ArgumentError, "Range members should be non-negative; got #{delay}!") if delay.first < 0 || delay.last < 0
+        raise(ArgumentError, "Range's end should be greater than or equal to range's start; got #{delay}!") if delay.first > delay.last
+        @delay_policy = lambda{ Kernel.sleep(delay.first + rand(delay.count)) }
       else
         raise(ArgumentError, "Delay should be either an number or a range of numbers; got #{delay}!")
       end
-      raise(ArgumentError, 'Delay policy has already been specified!') if @delay_policy
-      @delay_policy = lambda{Kernel.sleep(delay.first + rand(delay.count))}
 
       attempt(block)
     end
@@ -80,7 +81,7 @@ module AttemptThis
     # Specifies delay which doubles between failed attempts.
     def with_binary_backoff(initial_delay, &block)
       raise(ArgumentError, "Delay should be a number; got ${initial_delay}!") unless initial_delay.is_a?(Numeric)
-      raise(ArgumentError, "Delay should be a positive number; got #{initial_delay}!") unless initial_delay > 0
+      raise(ArgumentError, "Delay should be a positive number; got #{initial_delay}!") if initial_delay <= 0
       raise(ArgumentError, "Delay policy has already been specified!") if @delay_policy
 
       @delay_policy = BinaryBackoffPolicy.new(initial_delay)
@@ -89,7 +90,7 @@ module AttemptThis
 
     # Specifies exceptions
     def with_filter(*exceptions, &block)
-      raise(ArgumentError, "Empty exceptions list!") unless exceptions.size > 0
+      raise(ArgumentError, "Empty exceptions list!") if exceptions.size <= 0
       # Everything must be an exception.
       exceptions.each do |e|
         raise(ArgumentError, "Not an exception: #{e}!") unless e <= Exception

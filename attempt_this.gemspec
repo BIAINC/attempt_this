@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'attempt_this'
-  s.version     = '1.0.2'
+  s.version     = '1.0.3'
   s.date        = '2014-04-29'
   s.summary     = 'Retry policy mix-in'
   s.description = <<EOM
@@ -15,8 +15,9 @@ EOM
   s.license     = 'MIT'
   s.required_ruby_version = '>= 1.8.7'
 
-  s.add_development_dependency('bundler', '~> 1.6')
-  s.add_development_dependency('rake', '~> 10.1')
-  s.add_development_dependency('rspec', '~> 2.13')
-  s.add_development_dependency('simplecov', '~> 0.8')
+  s.add_development_dependency 'bundler', '~> 1.6'
+  s.add_development_dependency 'rake', '~> 10.1'
+  s.add_development_dependency 'rspec', '~> 2.13'
+  s.add_development_dependency 'simplecov', '~> 0.8'
+  s.add_development_dependency 'pry'
 end
